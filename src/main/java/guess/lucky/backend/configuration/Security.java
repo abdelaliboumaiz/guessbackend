@@ -38,5 +38,4 @@ public class Security extends WebSecurityConfigurerAdapter {
     protected PasswordEncoder getPasswordEncoder(){
         return new BCryptPasswordEncoder();
     }
-
 }
