@@ -4,7 +4,9 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    database : mysql
   datasource:
-    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/guessDatabase?useSSL=false&serverTimezone=UTC}
-    username: ${MYSQL_USERNAME:root}
-    password: ${MYSQL_PASSWORD:root}
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/guessDatabase?createDatbaseIfNotExist=true}
+    username: ${spring_datasource_username:root}
+    password: ${spring_datasource_password:local_db_pass}
+    plateforme : mysql
