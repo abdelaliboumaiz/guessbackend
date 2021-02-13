@@ -1,0 +1,26 @@
+version: "3.1"
+
+services:
+    db:
+      image: mysql:latest
+      container_name: guessLuckyDb    
+      environment:
+        - MYSQL_ROOT_PASSWORD=local_db_pass
+        - MYSQL_USER=local_db_user
+      ports:
+        - "3306:3306"
+      restart: always
+      
+    
+    phpmyadmin:
+      image: phpmyadmin/phpmyadmin:latest
+      container_name: my-php-myadmin
+      ports:
+        - "8082:80"
+      restart: always
+        
+      depends_on:
+        - db
+      environment:
+        SPRING_DATASOURCE_USERNAME: local_db_user
+        SPRING_DATASOURCE_PASSWORD: local_db_pass
