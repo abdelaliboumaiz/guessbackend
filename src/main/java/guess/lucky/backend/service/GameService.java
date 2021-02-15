@@ -1,5 +1,7 @@
 package guess.lucky.backend.service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +23,22 @@ public class GameService {
     @Autowired 
     private GameHistoryService gameHistoryService; 
     
-    public void playGame(GameRequest game) {
+    public void playGame(GameRequest game) throws ParseException {
         
         Optional<User> user = userRepository.findById(game.getUser_id());
         if(user.get()==null) {
             throw new ResourceNotFound(); 
         }
-        boolean isPermissibleToPlay = gameHistoryService.isPermissibleToPlay(user.get()); 
+        boolean isPermissibleToPlay = gameHistoryService.isPermissibleToPlay(user.get());
+        if(!isPermissibleToPlay) {
+            throw new ResourceNotFound(); 
+        }
         Game currentGame = new Game(); 
-        
+        currentGame.setChosenNumbers(game.getChosenNumbers());
+        currentGame.setHoroscopes(game.getChosenHoroscopes());
+        currentGame.setUser(user.get());
+        currentGame.setGamePlayedAt(new Date());
+        gameHistoryService.saveGameToHistory(currentGame); 
     }
     
   

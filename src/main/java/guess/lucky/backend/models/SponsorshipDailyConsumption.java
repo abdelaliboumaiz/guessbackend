@@ -1,7 +1,6 @@
 package guess.lucky.backend.models;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,24 +16,21 @@ import guess.lucky.backend.models.config.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-@Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-public class Game {
+@Data
+public class SponsorshipDailyConsumption {
     @Id
     @Column(name ="id")
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Long id;
     @ManyToOne
     @JoinColumn(name="user_id",referencedColumnName = "id")
-    private User user;
+    private User concernedUser; 
     @Temporal(TemporalType.DATE)
-    private Date gamePlayedAt;
-    private String chosenNumbers; //6
-    private String horoscopes; //2
-    //id+155555 
-    public List<Integer> getChosenNumbers(){
-        return null;
-    }
+    private Date requestDate; 
+    @Column(columnDefinition = "integer default 0")
+    private Integer usedTries; 
+
 }
