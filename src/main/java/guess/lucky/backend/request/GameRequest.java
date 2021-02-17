@@ -1,18 +1,13 @@
 package guess.lucky.backend.request;
 
-import java.util.List;
-
 import lombok.Data;
 
 @Data
 public class GameRequest {
     Long user_id; 
-    List<Integer> chosenNumber; 
-    List<Horoscope> horoscopes; 
+    String chosenNumbers;
+    String chosenHoroscopes; 
     
-    @Data
-    public class Horoscope { 
-        String name; 
-    }
+  
 
 }
