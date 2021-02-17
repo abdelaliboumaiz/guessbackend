@@ -5,8 +5,21 @@ spring:
     hibernate:
       ddl-auto: update
     database : mysql
+  mail:
+    host: ${MAIL_HOST:smtp.gmail.com}
+    username: ${MAIL_USERNAME:noreply.guessess@gmail.com}
+    password: ${MAIL_PASSWORD:Lucky.2021}
+    port: ${MAIL_PORT:587}
+    default-encoding: UTF-8
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_AUTH:true}
+          starttls:
+            enable: ${MAIL_STARTTLS:true}
   datasource:
-    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/guessDatabase?createDatbaseIfNotExist=true}
+    url: ${MYSQL_URL:jdbc:mysql://localhost:3306/guessDatabase?createDatbaseIfNotExist=true&serverTimezone=UTC&useLegacyDatetimeCode=false}
     username: ${spring_datasource_username:root}
-    password: ${spring_datasource_password:local_db_pass}
+    password: ${spring_datasource_password:root}
     plateforme : mysql

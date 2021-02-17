@@ -24,9 +24,10 @@ public class User {
     private String password;
     private boolean active;
     private String roles;
-    private String telephone;
+    private String mail;
     private int age;
-    private boolean isValidNumber;
+    private boolean isValidMail;
+    private int confirmationCode;
     private Date registration_date;
     private int score;
     private int heart_win;
