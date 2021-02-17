@@ -21,7 +21,7 @@ public class SponsorshipConsumptionService {
     
     public void incrementDailySponsorshipConsumption(User u) {
         SponsorshipDailyConsumption newlyCreatedConsumption = new SponsorshipDailyConsumption(); 
-        SponsorshipDailyConsumption oldConsumption = consumptionRepository.findByUserIdAndRequestDate(u.getId(), new Date()); 
+        SponsorshipDailyConsumption oldConsumption = consumptionRepository.findByConcernedUserAndAndRequestDate(u.getId(), new Date());
         newlyCreatedConsumption.setId(oldConsumption.getId());
         newlyCreatedConsumption.setConcernedUser(oldConsumption.getConcernedUser());
         Integer newConsumption = oldConsumption.getUsedTries()+1; 
@@ -29,12 +29,12 @@ public class SponsorshipConsumptionService {
     }
     
     public int getHowManyPeopleUserSponsor(User u) {
-        Sponsorship s = sponsorShipRepository.findByUserId(u.getId()); 
+        Sponsorship s = sponsorShipRepository.findBySponsor_Id(u.getId());
         return s.getHowManyPeopleISponsor(); 
     }
 
     public int getUsedTodayAdditionalTries(User u) {
-        SponsorshipDailyConsumption dailyConsumption = consumptionRepository.findByUserIdAndRequestDate(u.getId(), new Date()); 
+        SponsorshipDailyConsumption dailyConsumption = consumptionRepository.findByConcernedUserAndAndRequestDate(u.getId(), new Date());
         return dailyConsumption.getUsedTries(); 
     }
     

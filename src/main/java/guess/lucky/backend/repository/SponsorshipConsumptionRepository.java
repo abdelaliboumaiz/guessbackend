@@ -9,5 +9,5 @@ import guess.lucky.backend.models.SponsorshipDailyConsumption;
 
 @Repository
 public interface SponsorshipConsumptionRepository extends JpaRepository<SponsorshipDailyConsumption,Long> {
-    SponsorshipDailyConsumption findByUserIdAndRequestDate(Long user_id,Date requestDate); 
+    SponsorshipDailyConsumption findByConcernedUserAndAndRequestDate(Long user_id,Date requestDate);
 }

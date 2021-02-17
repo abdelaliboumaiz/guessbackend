@@ -7,5 +7,5 @@ import guess.lucky.backend.models.Sponsorship;
 
 @Repository
 public interface SponsorshipRepository extends JpaRepository<Sponsorship,Long> {
-    Sponsorship findByUserId(Long user_id); 
+    public Sponsorship findBySponsor_Id(long id);
 }
