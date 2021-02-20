@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import guess.lucky.backend.request.GameRequest;
 import guess.lucky.backend.service.GameService;
 
-@RestController("/api")
+@RestController("/api/game")
 public class GameController {
     
     @Autowired

@@ -14,11 +14,22 @@ public class MailService {
     private JavaMailSender emailSender;
 
     public void sendMail(
-            String to, String subject, String text) {
+            String to, int verificationCode) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom("noreply@gmail.com");
         message.setTo(to);
-        message.setSubject(subject);
+        message.setSubject("Validation email");
+        String text = "Votre code de validation est : " + verificationCode;
+        message.setText(text);
+        emailSender.send(message);
+    }
+
+    public void resetPassword(String to, int verificationCode){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom("noreply@gmail.com");
+        message.setTo(to);
+        message.setSubject("Récuperer votre mot de passe");
+        String text = "Votre code de confirmation est : " + verificationCode;
         message.setText(text);
         emailSender.send(message);
     }

@@ -23,3 +23,10 @@ spring:
     username: ${spring_datasource_username:root}
     password: ${spring_datasource_password:root}
     plateforme : mysql
+logging:
+  level:
+    org.springframework: ERROR
+    org.springframework.test: ERROR
+    springfox: ERROR
+    org.hibernate: ERROR
+    org.springframework.core.env: ERROR
