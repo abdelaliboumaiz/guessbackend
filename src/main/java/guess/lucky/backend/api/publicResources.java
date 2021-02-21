@@ -19,6 +19,13 @@ public class publicResources {
     @Autowired
     private UserService userService;
 
+    @PostMapping("/test")
+    public ResponseEntity<User> test(@RequestBody User user){
+        log.info("Dkheeeel");
+        //throw new ServiceException("Fuck Yourself");
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @GetMapping("/login")
     public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password){
         return new ResponseEntity<>(userService.checkUserAndPass(email, password), HttpStatus.OK);
