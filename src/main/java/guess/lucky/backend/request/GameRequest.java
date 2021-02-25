@@ -6,8 +6,5 @@ import lombok.Data;
 public class GameRequest {
     Long user_id; 
     String chosenNumbers;
-    String chosenHoroscopes; 
-    
-  
-
+    String chosenHoroscopes;
 }

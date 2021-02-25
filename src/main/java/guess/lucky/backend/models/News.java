@@ -8,7 +8,7 @@ public class News {
     private Date expired_date;
     private String title;
     private String subtitle;
-    private String image_url;
+    private String imageUrl;
     private String content;
 
     public News() {
@@ -46,12 +46,12 @@ public class News {
         this.title = title;
     }
 
-    public String getImage_url() {
-        return image_url;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
     public String getContent() {

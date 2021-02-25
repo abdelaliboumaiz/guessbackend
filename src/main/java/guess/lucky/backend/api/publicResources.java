@@ -1,6 +1,7 @@
 package guess.lucky.backend.api;
 
 import guess.lucky.backend.exceptions.ServiceException;
+import guess.lucky.backend.models.Game;
 import guess.lucky.backend.models.config.User;
 import guess.lucky.backend.service.UserService;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/public")
@@ -19,26 +21,15 @@ public class publicResources {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/test")
-    public ResponseEntity<User> test(@RequestBody User user){
-        log.info("Dkheeeel");
-        //throw new ServiceException("Fuck Yourself");
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
     @GetMapping("/login")
     public ResponseEntity<User> login(@RequestParam String email, @RequestParam String password){
         return new ResponseEntity<>(userService.checkUserAndPass(email, password), HttpStatus.OK);
     }
 
     @PostMapping("/create-user")
-    public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam(required = false) Long id){
+    public ResponseEntity<User> createUser(@RequestBody User user, @RequestParam Long id){
         log.info("User created " + user.getMail());
-        if(id == null){
-            return new ResponseEntity<>(userService.createUser(user, 0), HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(userService.createUser(user, id), HttpStatus.OK);
-        }
+        return new ResponseEntity<>(userService.createUser(user, id), HttpStatus.OK);
     }
 
     @GetMapping("/user-email")

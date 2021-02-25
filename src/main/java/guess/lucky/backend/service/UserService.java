@@ -10,9 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
 
@@ -25,8 +27,10 @@ public class UserService implements UserDetailsService {
 
     public User checkUserAndPass(String email, String password){
         User user = userRepository.findByMail(email).orElseThrow(()->{return new ServiceException("Votre email est incorrect");});
-        if(!user.getPassword().equals(new BCryptPasswordEncoder().encode(password)))
+        if(!BCrypt.checkpw(password.getBytes(), user.getPassword()))
             throw new ServiceException("Votre mot de passe est incorrect");
+        if(!user.isActive())
+            throw new ServiceException("Votre compte n'est pas valide");
         return user;
     }
 
@@ -47,7 +51,7 @@ public class UserService implements UserDetailsService {
         }
         if(id != 0){
             if(!checkIsSponsorship(id)){
-                throw new ServiceException("code de parrainage incorrect");
+                throw new ServiceException("Code de parrainage incorrect");
             }
         }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
@@ -56,8 +60,13 @@ public class UserService implements UserDetailsService {
         user.setHeart_peer_day(5);
         user.setValidMail(false);
         user.setScore(0);
+        user.setActive(false);
         user.setConfirmationCode(mailService.generateCodeMail());
-        mailService.sendMail(user.getMail(), user.getConfirmationCode());
+        try{
+            mailService.sendMail(user.getMail(), user.getConfirmationCode());
+        }catch (Exception e){
+            throw new ServiceException("Email non envoyé");
+        }
         return userRepository.save(user);
     }
 

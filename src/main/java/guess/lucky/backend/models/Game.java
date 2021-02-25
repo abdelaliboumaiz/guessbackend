@@ -33,8 +33,4 @@ public class Game {
     private Date gamePlayedAt;
     private String chosenNumbers; //6
     private String horoscopes; //2
-    //id+155555 
-    public List<Integer> getChosenNumbers(){
-        return null;
-    }
 }

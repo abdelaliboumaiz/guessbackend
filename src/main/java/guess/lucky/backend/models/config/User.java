@@ -33,4 +33,5 @@ public class User implements Serializable {
     private int score;
     private int heart_win;
     private int heart_peer_day;
+    private String token;
 }

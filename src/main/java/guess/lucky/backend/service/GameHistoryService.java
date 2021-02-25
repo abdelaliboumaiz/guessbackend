@@ -3,6 +3,7 @@ package guess.lucky.backend.service;
 import java.util.Date;
 import java.util.List;
 
+import guess.lucky.backend.repository.config.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,28 +18,23 @@ public class GameHistoryService {
     private static final int NOSPONSORSHIPAVAILABLE = 0 ; 
     
     @Autowired
-    private GameHisotryRepository gameHisotry; 
-    @Autowired 
-    private SponsorshipConsumptionService sponsorshipConsumptionService; 
+    private GameHisotryRepository gameHisotry;
+
+    @Autowired
+    private UserRepository userRepository;
+
     
     public boolean isPermissibleToPlay(User u) {
         List<Game> playedGameInTheCurrentDate = gameHisotry.findByUserIdAndGamePlayedAt(u.getId(), new Date()); 
         int numberOfPlayedTodaySessions = playedGameInTheCurrentDate.size(); 
         if(numberOfPlayedTodaySessions < NUMBEROFPERMISSIBLETRIESPERDAY) {
+            decrementalDailyGame(u);
             return true; 
         }
         else { 
-            int numberOfPeopleISponsor = sponsorshipConsumptionService.getHowManyPeopleUserSponsor(u); 
-            if(numberOfPeopleISponsor > NOSPONSORSHIPAVAILABLE) {
-                int usedTodayAdditionalTries = sponsorshipConsumptionService.getUsedTodayAdditionalTries(u);
-                if(usedTodayAdditionalTries > numberOfPeopleISponsor * 5) {
-                    return false; 
-                }
-                else { 
-                    sponsorshipConsumptionService.incrementDailySponsorshipConsumption(u);
-                    return true; 
-                }
-                
+            if(u.getHeart_win() > NOSPONSORSHIPAVAILABLE){
+                decrementalWinGame(u);
+                return true;
             }
         }
         return false; 
@@ -48,4 +44,13 @@ public class GameHistoryService {
         return gameHisotry.save(g); 
     }
 
+    public void decrementalDailyGame(User u){
+        u.setHeart_peer_day(u.getHeart_peer_day() - 1);
+        userRepository.save(u);
+    }
+
+    public void decrementalWinGame(User u){
+        u.setHeart_win(u.getHeart_win() - 1);
+        userRepository.save(u);
+    }
 }
