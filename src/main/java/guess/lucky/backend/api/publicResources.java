@@ -32,10 +32,10 @@ public class publicResources {
         return new ResponseEntity<>(userService.createUser(user, id), HttpStatus.OK);
     }
 
-    @GetMapping("/user-email")
+    @GetMapping("/user-email-reset")
     public ResponseEntity<User> getUserByEmail(@RequestParam String email){
         log.info("User get " + email);
-        return new ResponseEntity<>(userService.getUserByEmail(email), HttpStatus.OK);
+        return new ResponseEntity<>(userService.getUserByEmailReset(email), HttpStatus.OK);
     }
 
     @GetMapping("/user-id")
@@ -62,7 +62,7 @@ public class publicResources {
         return new ResponseEntity<>(userService.validationPassword(email, confirmationCode), HttpStatus.OK);
     }
 
-    @PostMapping("/update-password")
+    @PostMapping("/update-user-password")
     public ResponseEntity<User> updatePassword(@RequestBody User user){
         log.info("update password for " + user.getMail());
         return new ResponseEntity<>(userService.updatePassword(user), HttpStatus.OK);

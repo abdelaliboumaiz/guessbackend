@@ -13,8 +13,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.Optional;
 
@@ -34,8 +32,16 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public User getUserByEmail(String email){
-        return userRepository.findByMail(email).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
+    public User getUserByEmailReset(String email){
+        User user = userRepository.findByMail(email).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
+        user.setConfirmationCode(mailService.generateCodeMail());
+        try{
+            mailService.sendMail(user.getMail(), user.getConfirmationCode());
+        }catch (Exception e){
+            throw new ServiceException("Erreur d'envoi de mail");
+        }
+        userRepository.save(user);
+        return user;
     }
 
     public User getUserById(long id){
@@ -98,18 +104,17 @@ public class UserService implements UserDetailsService {
     //check confirmation code to reset password
     public User validationPassword(String mail, int confirmationCode){
         User user = userRepository.findByMail(mail).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
-        if(user.getConfirmationCode() == confirmationCode){
-            return userRepository.save(user);
-        }else{
-            throw new ServiceException("code de confirmation incorrect");
-        }
+        if(user.getConfirmationCode() == confirmationCode)
+            return user;
+        throw new ServiceException("code de confirmation incorrect");
     }
 
     //Update password
     public User updatePassword(User user){
-        userRepository.findByMail(user.getMail()).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
-        user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
-        return userRepository.save(user);
+        User save = userRepository.findByMail(user.getMail()).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
+        save.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+        save.setToken(user.getToken());
+        return userRepository.save(save);
     }
 
     //Update User
