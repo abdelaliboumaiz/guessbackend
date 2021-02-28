@@ -19,12 +19,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @PostMapping("/update-user")
-    public ResponseEntity<User> updateUser(@RequestBody User user){
-        log.info("update user for " + user.getMail());
-        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
-    }
-
     @GetMapping("/user-id")
     public ResponseEntity<User> getUserById(@RequestParam long id){
         log.info("User get " + id);

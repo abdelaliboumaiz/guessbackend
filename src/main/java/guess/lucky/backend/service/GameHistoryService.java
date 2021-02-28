@@ -32,7 +32,7 @@ public class GameHistoryService {
             return true; 
         }
         else { 
-            if(u.getHeart_win() > NOSPONSORSHIPAVAILABLE){
+            if(u.getHeartWin() > NOSPONSORSHIPAVAILABLE){
                 decrementalWinGame(u);
                 return true;
             }
@@ -45,12 +45,12 @@ public class GameHistoryService {
     }
 
     public void decrementalDailyGame(User u){
-        u.setHeart_peer_day(u.getHeart_peer_day() - 1);
+        u.setHeartPeerDay(u.getHeartPeerDay() - 1);
         userRepository.save(u);
     }
 
     public void decrementalWinGame(User u){
-        u.setHeart_win(u.getHeart_win() - 1);
+        u.setHeartWin(u.getHeartWin() - 1);
         userRepository.save(u);
     }
 }

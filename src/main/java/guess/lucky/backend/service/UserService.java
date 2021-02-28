@@ -13,6 +13,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Date;
 import java.util.Optional;
 
@@ -48,6 +50,7 @@ public class UserService implements UserDetailsService {
         return userRepository.findById(id).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
     }
 
+    @Transactional(rollbackFor = {Exception.class, ServiceException.class, RuntimeException.class})
     public User createUser(User user, long id){
         if(user.getId() != 0 && userRepository.existsById(user.getId())){
             throw new ServiceException("Utilisateur existe déja");
@@ -55,15 +58,10 @@ public class UserService implements UserDetailsService {
         if(userRepository.findByMail(user.getMail()).isPresent()){
             throw new ServiceException("Email existe déja");
         }
-        if(id != 0){
-            if(!checkIsSponsorship(id)){
-                throw new ServiceException("Code de parrainage incorrect");
-            }
-        }
         user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
         user.setRoles("ROLE_USER");
-        user.setRegistration_date(new Date());
-        user.setHeart_peer_day(5);
+        user.setRegistrationDate(new Date());
+        user.setHeartPeerDay(5);
         user.setValidMail(false);
         user.setScore(0);
         user.setActive(false);
@@ -73,7 +71,13 @@ public class UserService implements UserDetailsService {
         }catch (Exception e){
             throw new ServiceException("Email non envoyé");
         }
-        return userRepository.save(user);
+        User save = userRepository.save(user);
+        if(id != 0){
+            if(!checkIsSponsorship(id, save.getId())){
+                throw new ServiceException("Code de parrainage incorrect");
+            }
+        }
+        return save;
     }
 
     public User validationMail(long id, int confirmationCode){
@@ -119,16 +123,23 @@ public class UserService implements UserDetailsService {
 
     //Update User
     public User updateUser(User user){
-        userRepository.findByMail(user.getMail()).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
-        return userRepository.save(user);
+        User save = userRepository.findByMail(user.getMail()).orElseThrow(()->{return new ServiceException("utilisateur non trouver");});
+        save.setAge(user.getAge());
+        save.setFirstname(user.getFirstname());
+        save.setLastname(user.getLastname());
+        return userRepository.save(save);
     }
 
     // ID is 888888 + ID
-    public boolean checkIsSponsorship(long id){
+    public boolean checkIsSponsorship(long id, long userId){
         id = id - StaticVariable.KEY;
         User user = userRepository.findById(id).get();
         if(user != null){
-            user.setHeart_win(user.getHeart_win() + 5);
+            user.setHeartWin(user.getHeartWin() + 5);
+            if(user.getSponsoredId() == null)
+                user.setSponsoredId(userId + "");
+            else
+                user.setSponsoredId("," + user.getSponsoredId());
             userRepository.save(user);
             return true;
         }else

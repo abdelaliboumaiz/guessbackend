@@ -68,4 +68,10 @@ public class publicResources {
         return new ResponseEntity<>(userService.updatePassword(user), HttpStatus.OK);
     }
 
+    @PostMapping("/update-user")
+    public ResponseEntity<User> updateUser(@RequestBody User user){
+        log.info("update user for " + user.getMail());
+        return new ResponseEntity<>(userService.updateUser(user), HttpStatus.OK);
+    }
+
 }

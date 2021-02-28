@@ -15,5 +15,11 @@ public interface GameHisotryRepository extends JpaRepository<Game,Long> {
     List<Date> getPlayedDate(Long id);
 
     List<Game> findGameByGamePlayedAtAndUser_Id(Date date, Long id);
+
+    @Query("select count(g) from Game g where g.gamePlayedAt = ?1")
+    int gameCountByDay();
+
+    List<Game> findGameByGamePlayedAt(Date date);
+
     
 }

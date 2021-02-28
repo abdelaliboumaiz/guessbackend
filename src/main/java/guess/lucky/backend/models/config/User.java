@@ -29,9 +29,12 @@ public class User implements Serializable {
     private int age;
     private boolean isValidMail;
     private int confirmationCode;
-    private Date registration_date;
+    private Date registrationDate;
     private int score;
-    private int heart_win;
-    private int heart_peer_day;
+    private int heartWin;
+    private int heartPeerDay;
     private String token;
+    private String firstname;
+    private String lastname;
+    private String sponsoredId;
 }
