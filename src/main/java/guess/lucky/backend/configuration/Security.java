@@ -29,11 +29,7 @@ public class Security extends WebSecurityConfigurerAdapter {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/public/**").permitAll()
                 .antMatchers("/super/**").hasRole("ADMIN")
-                .antMatchers("/api/**").hasAnyRole("ADMIN", "USER")
-                .and().httpBasic().authenticationEntryPoint(authEntryPoint)
-                .and()
-                .sessionManagement()
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                .antMatchers("/api/**").hasAnyRole("ADMIN", "USER");
         super.configure(http);
     }
 
